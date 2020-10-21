@@ -19,3 +19,5 @@ typedef struct in_addr IN_ADDR;
 #define SND_ERROR -1
 #define INVALID_PARAM -2
 #define PORT_REGEX "[0-9]{4,5}"
+
+int check_args_server(int n, char** args);

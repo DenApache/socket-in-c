@@ -1,7 +1,7 @@
 #include "../utils.h"
 
 
-int main(int argc, char *argv[]){
+int main(int argc, char* argv[]){
 
     check_args_client(argc, argv);
     PORT port = atoi(argv[2]);

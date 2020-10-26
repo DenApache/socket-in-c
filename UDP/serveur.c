@@ -1,6 +1,6 @@
 #include "../utils.h"
 
-int main(int argc, char *argv[]){
+int main(int argc, char* argv[]){
 
     check_args_server(argc, argv);
     PORT port = atoi(argv[1]);
@@ -24,7 +24,10 @@ int main(int argc, char *argv[]){
     SOCKADDR_IN clt = {0};
     u_int32_t l_clt = sizeof(clt);
 
-    printf("Start listening %s:%i :\n\n", inet_ntoa(serv.sin_addr), htons(serv.sin_port));
+    display_log();
+    printf("UDP Server start\n");
+    display_log();
+    printf("Listening on port %i :\n", htons(serv.sin_port));
     /*----------- Reception -----------*/
     while(1) {
         int l_mess;
@@ -32,7 +35,7 @@ int main(int argc, char *argv[]){
             perror("error recvfrom");
         
         display_log();
-        printf(" %s:%i\n", inet_ntoa(clt.sin_addr), ntohs(clt.sin_port));
+        printf("Receive from %s:%i\n", inet_ntoa(clt.sin_addr), ntohs(clt.sin_port));
         
         buffer[l_mess] = '\0';
         //Echo to client

@@ -7,7 +7,8 @@
 #include <string.h>
 #include <regex.h>
 #include <time.h>
-
+#include <netdb.h>
+#include <string.h>
 
 typedef int SOCKET;
 typedef int PORT;
@@ -24,7 +25,7 @@ typedef struct in_addr IN_ADDR;
 
 void check_args_server(int n, char** args);
 
-int check_args_client(int n, char** args);
+void check_args_client(int n, char** args);
 
 void display_log();
 

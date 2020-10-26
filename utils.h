@@ -27,3 +27,5 @@ void check_args_server(int n, char** args);
 int check_args_client(int n, char** args);
 
 void display_log();
+
+SOCKET create_socket();

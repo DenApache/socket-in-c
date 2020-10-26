@@ -41,3 +41,12 @@ void display_log(){
     struct tm tm = *localtime(&t);
     printf("[%d-%02d-%02d %02d:%02d:%02d] [+] ", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
 }
+
+SOCKET create_socket(){
+    SOCKET sock = socket(AF_INET, SOCK_DGRAM, 0);
+    if(sock == INVALID_SOCKET){
+        perror("error create socket");
+        exit(-1);
+    }
+    return sock;
+}

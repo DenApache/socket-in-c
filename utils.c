@@ -35,50 +35,33 @@ int check_server_address(char* IP ){
    
     // Checks the length of the chain
     if( !IP_len || IP_len > 15)
-    {
         validity = 0;
-    }
-    else
-    {
+    else{
         /* We recover the first byte  */
         byte = atoi(IP);
-        
         /* If it is greater than 255 then it is not a valid IP */
         if(byte > 255)
-        {
-            validity = 0;
-        }
-           
+            validity = 0;    
         /* We go through the chain */
-        for(int i = 0; i < IP_len && validity; i++)
-        {
+        for(int i = 0; i < IP_len && validity; i++){
             /* We check if each character is only a number or a dot */
             if(!(IP[i] >= '0' && IP[i] <= '9') && IP[i] != '.')
-            {
                 validity = 0;
-            }
           
             /* Count the number of dots*/
-            if(IP[i] == '.')
-            {
+            if(IP[i] == '.'){
                 dotCount ++;
                 /* We check if the byte we retrieve is valid */
                 byte = atoi(&IP[i+1]);
-                if(byte > 255)
-                {
+                if(byte > 255){
                     validity = 0;
                 }
             }
         }
         /* if there are not three points in the ip then it is not a valid ip */
         if(dotCount != 3)
-        {
-            validity = 0;
-        }
-           
-    }
-       
-   
+            validity = 0;         
+    } 
     return validity; 
 }
 
@@ -92,7 +75,7 @@ void check_args_client(int n, char** args){
         printf("Address IP is not valid\n");
         exit(1);
     }
-    if (strlen(args[3])>=256){
+    if (strlen(args[3])>= MSG_SIZE){
         printf("Size must not exceed 255 bytes\n");
         exit(2);
     }

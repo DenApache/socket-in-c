@@ -21,7 +21,9 @@ typedef struct in_addr IN_ADDR;
 #define RECV_ERROR -1
 #define SND_ERROR -1
 #define INVALID_PARAM -2
+
 #define PORT_REGEX "[0-9]{4,5}"
+#define MSG_SIZE 256
 
 void check_args_server(int n, char** args);
 

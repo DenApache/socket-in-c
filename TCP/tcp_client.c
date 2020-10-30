@@ -5,24 +5,37 @@ int main(int argc, char** argv){
     //checks the validity of the arguments
     check_args_client(argc, argv);
 
+    
     SOCKET network_socket;
     PORT port = atoi(argv[2]);
     int connection_status;
     char server_response[256];
     char message[256];
+
+    //Get client message
     strcpy(message,argv[3]);
-    network_socket = socket(AF_INET, SOCK_STREAM, 0); 
+
+    //Create the socket and checks if there is an error
+    if ((network_socket = socket(AF_INET, SOCK_STREAM, 0)) == INVALID_SOCKET){
+        perror("error create socket");
+        return 1;
+    }
     
+    //define client socket
     struct sockaddr_in server_address;
     server_address.sin_family = AF_INET;
     server_address.sin_port = htons(port);
     server_address.sin_addr.s_addr = inet_addr(argv[1]);
 
+    //Open the connection with the remote server
     connection_status = connect(network_socket, (struct sockaddr *) &server_address, sizeof(server_address));
-    //check for error
+    
+    //checks for error
     if (connection_status == -1){
         printf("There was an error making a connection to the remote socket\n");
+        return 1;
     }
+
     display_log();
     printf("Connection etablished with %s on port %d\n", argv[1], port);
     //Sends a message to the server
@@ -36,7 +49,7 @@ int main(int argc, char** argv){
     display_log();
     printf("Receive from %s : %s\n", argv[1], server_response);
 
+    // Close the socket
     close(network_socket);
-
     return 0;
 }

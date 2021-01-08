@@ -4,7 +4,7 @@
 int main(int argc, char** argv){
     //checks the validity of the arguments
     check_args_client(argc, argv);
-
+    
     
     SOCKET network_socket;
     PORT port = atoi(argv[2]);
@@ -16,16 +16,18 @@ int main(int argc, char** argv){
     strcpy(message,argv[3]);
 
     //Create the socket and checks if there is an error
-    if ((network_socket = socket(AF_INET, SOCK_STREAM, 0)) == INVALID_SOCKET){
+    if ((network_socket = socket(AF_INET6, SOCK_STREAM, 0)) == INVALID_SOCKET){
         perror("error create socket");
         return 1;
     }
     
     //define client socket
-    struct sockaddr_in server_address;
-    server_address.sin_family = AF_INET;
-    server_address.sin_port = htons(port);
-    server_address.sin_addr.s_addr = inet_addr(argv[1]);
+    SOCKADDR_IN6 server_address;
+    server_address.sin6_family = AF_INET6;
+    server_address.sin6_port = htons(port);
+    if (!inet_pton(AF_INET6, argv[1], &server_address.sin6_addr)){
+        inet_pton(AF_INET, argv[1], &server_address.sin6_addr);
+    }
 
     //Open the connection with the remote server
     connection_status = connect(network_socket, (struct sockaddr *) &server_address, sizeof(server_address));

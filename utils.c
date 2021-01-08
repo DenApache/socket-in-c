@@ -28,43 +28,16 @@ void check_args_server(int n, char** args){
 }
 
 int check_server_address(char* IP ){
-    int validity, byte, IP_len, dotCount;
-       
-    validity = 1;
-    IP_len = strlen(IP);
-    dotCount = 0;
-   
-    // Checks the length of the chain
-    if( !IP_len || IP_len > 15)
-        validity = 0;
-    else{
-        /* We recover the first byte  */
-        byte = atoi(IP);
-        /* If it is greater than 255 then it is not a valid IP */
-        if(byte > 255)
-            validity = 0;    
-        /* We go through the chain */
-        for(int i = 0; i < IP_len && validity; i++){
-            /* We check if each character is only a number or a dot */
-            if(!(IP[i] >= '0' && IP[i] <= '9') && IP[i] != '.')
-                validity = 0;
-          
-            /* Count the number of dots*/
-            if(IP[i] == '.'){
-                dotCount ++;
-                /* We check if the byte we retrieve is valid */
-                byte = atoi(&IP[i+1]);
-                if(byte > 255){
-                    validity = 0;
-                }
-            }
-        }
-        /* if there are not three points in the ip then it is not a valid ip */
-        if(dotCount != 3)
-            validity = 0;         
-    } 
-    return validity; 
+    char buffer[16];
+    if (inet_pton(AF_INET, IP, buffer)){
+        return 1;
+    }
+    else if (inet_pton(AF_INET6, IP, buffer)){
+        return 1;
+    }
+    return 0;
 }
+
 
 void check_args_client(int n, char** args){
     //checks the number of arguments
@@ -75,7 +48,7 @@ void check_args_client(int n, char** args){
     // Checks validity of the port
     check_port(args[2]);
     if (!check_server_address(args[1])){
-        printf("Address IP is not valid\n");
+        printf("IP address is not valid\n");
         exit(1);
     }
     // checks if the size of the message doesn't exceed 255 bytes

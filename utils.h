@@ -15,6 +15,7 @@
 typedef int SOCKET;
 typedef int PORT;
 typedef struct sockaddr_in SOCKADDR_IN;
+typedef struct sockaddr_in6 SOCKADDR_IN6;
 typedef struct sockaddr SOCKADDR;
 typedef struct in_addr IN_ADDR;
 
@@ -30,7 +31,8 @@ typedef struct in_addr IN_ADDR;
 typedef struct {
     SOCKET socket;
     char hostname[64];
-    SOCKADDR_IN address;
+    char str_addr[INET6_ADDRSTRLEN];
+    SOCKADDR_IN6 address;
 } client_t;
 
 void check_args_server(int n, char** args);

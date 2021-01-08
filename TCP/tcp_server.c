@@ -12,19 +12,19 @@ int main(int argc, char** argv){
     
 
     //create the server socket and checks if there is an error
-    if((server_socket = socket(AF_INET, SOCK_STREAM, 0)) == INVALID_SOCKET){
+    if((server_socket = socket(AF_INET6, SOCK_STREAM, 0)) == INVALID_SOCKET){
         perror("error create socket");
         return 1;
     }
 
     //define the server address
-    struct sockaddr_in server_address;
-    server_address.sin_family = AF_INET;
-    server_address.sin_port = htons(port);
-    server_address.sin_addr.s_addr = INADDR_ANY;
+    struct sockaddr_in6 server_address;
+    server_address.sin6_family = AF_INET6;
+    server_address.sin6_port = htons(port);
+    server_address.sin6_addr = in6addr_any;
 
     //define client adress
-    struct sockaddr_in new_client;
+    struct sockaddr_in6 new_client;
     socklen_t new_client_size = sizeof(new_client);
 
     display_log();
@@ -65,8 +65,9 @@ int main(int argc, char** argv){
 
 void* handle_client(void* pclient){
     client_t* client = (client_t*) pclient;
+    inet_ntop(AF_INET6, &(client->address.sin6_addr),client->str_addr, sizeof(client->str_addr));
     display_log();
-    printf("New connection from %s (%s)\n", inet_ntoa(client->address.sin_addr),client->hostname);
+    printf("New connection from %s (%s)\n", client->str_addr,client->hostname);
     char client_message[256];
     bzero(client_message, 256);
     
@@ -75,11 +76,11 @@ void* handle_client(void* pclient){
     
         //Display client message
         display_log();
-        printf("Receive from %s (%s) : %s\n", inet_ntoa(client->address.sin_addr),client->hostname, client_message);
+        printf("Receive from %s (%s) : %s\n", client->str_addr,client->hostname, client_message);
         
         //Sends the message receveid from the client
         display_log();
-        printf("Sent to %s (%s) : %s\n", inet_ntoa(client->address.sin_addr),client->hostname, client_message);
+        printf("Sent to %s (%s) : %s\n", client->str_addr,client->hostname, client_message);
         send(client->socket, client_message, sizeof(client_message),0);
 
         // Clear the buffer of client_message

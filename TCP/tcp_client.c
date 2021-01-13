@@ -5,36 +5,38 @@ int main(int argc, char** argv){
     //checks the validity of the arguments
     check_args_client(argc, argv);
     
-    
     SOCKET network_socket;
     PORT port = atoi(argv[2]);
     int connection_status;
     char server_response[256];
     char message[256];
 
+    
+    struct addrinfo hints, *serv_addr;
+    memset(&hints, 0, sizeof(hints));
+    hints.ai_family = AF_UNSPEC;
+    hints.ai_socktype = SOCK_STREAM;
+    getaddrinfo(argv[1], argv[2], &hints, &serv_addr);
+    
+    
+    
+
     //Get client message
     strcpy(message,argv[3]);
 
     //Create the socket and checks if there is an error
-    if ((network_socket = socket(AF_INET6, SOCK_STREAM, 0)) == INVALID_SOCKET){
+    printf("%d\n",serv_addr->ai_socktype);
+    if ((network_socket = socket(serv_addr->ai_family, serv_addr->ai_socktype, 0)) == INVALID_SOCKET){
         perror("error create socket");
         return 1;
     }
     
-    //define client socket
-    SOCKADDR_IN6 server_address;
-    server_address.sin6_family = AF_INET6;
-    server_address.sin6_port = htons(port);
-    if (!inet_pton(AF_INET6, argv[1], &server_address.sin6_addr)){
-        inet_pton(AF_INET, argv[1], &server_address.sin6_addr);
-    }
+    struct addrinfo *server_address = serv_addr;
 
-    //Open the connection with the remote server
-    connection_status = connect(network_socket, (struct sockaddr *) &server_address, sizeof(server_address));
-    
+    connection_status = connect(network_socket, server_address->ai_addr, server_address->ai_addrlen);
     //checks for error
     if (connection_status == -1){
-        printf("There was an error making a connection to the remote socket\n");
+        perror("There was an error making a connection to the remote host\n");
         return 1;
     }
 

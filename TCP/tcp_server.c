@@ -86,6 +86,8 @@ void* handle_client(void* pclient){
         // Clear the buffer of client_message
         bzero(client_message, 256);
     }
+    display_log();
+    printf("%s (%s) Disconnected \n",client->hostname, client->str_addr);
     close(client->socket);
     free(client);
     pthread_exit(NULL);

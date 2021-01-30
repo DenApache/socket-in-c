@@ -63,6 +63,12 @@ int main(int argc, char** argv){
     return 0;
 }
 
+/**
+ * @brief Handle client connection and messages.
+ * 
+ * @param pclient Client structure
+ * @return void* 
+ */
 void* handle_client(void* pclient){
     client_t* client = (client_t*) pclient;
     inet_ntop(AF_INET6, &(client->address.sin6_addr),client->str_addr, sizeof(client->str_addr));

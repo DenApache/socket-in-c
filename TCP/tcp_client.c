@@ -5,22 +5,24 @@ int main(int argc, char** argv){
     //checks the validity of the arguments
     check_args_client(argc, argv);
     
+    //declare the socket
     SOCKET network_socket;
+    
+    //Get tcp port
     PORT port = atoi(argv[2]);
+    
     int connection_status;
     char server_response[256];
     char message[256];
 
     
-    struct addrinfo hints, *serv_addr;
-    memset(&hints, 0, sizeof(hints));
-    hints.ai_family = AF_UNSPEC;
-    hints.ai_socktype = SOCK_STREAM;
-    getaddrinfo(argv[1], argv[2], &hints, &serv_addr);
+    struct addrinfo hints, *serv_addr; 
+    memset(&hints, 0, sizeof(hints)); //CLear the structure hints
+    hints.ai_family = AF_UNSPEC; // Both IPV4 and IPV6 addresses 
+    hints.ai_socktype = SOCK_STREAM; // Type of socket SOCK_STREAM for TCP conneciton
+    getaddrinfo(argv[1], argv[2], &hints, &serv_addr); // Identify remote host with hints info, port and hostname(or IP address) 
+     
     
-    
-    
-
     //Get client message
     strcpy(message,argv[3]);
 
@@ -33,6 +35,7 @@ int main(int argc, char** argv){
     
     struct addrinfo *server_address = serv_addr;
 
+    // Open TCP connection
     connection_status = connect(network_socket, server_address->ai_addr, server_address->ai_addrlen);
     //checks for error
     if (connection_status == -1){
